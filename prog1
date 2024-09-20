@@ -1,3 +1,40 @@
-int main(){
+#include <iostream>
+#include <string>
+using namespace std;
 
+void Increment();
+
+char cipher[26][26];
+char alphabet[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+string message;
+string key;
+
+int main(){
+    int row;
+    int col;
+    int letter;
+    
+    for(row = 0 ; row < 26; row++){
+        letter = 0;
+        for(col = 0 ; col < 26; col++ ){
+            cipher[row][col] = alphabet[letter];
+            letter++;
+        //    cout << cipher[row][col];
+        }
+        Increment();
+      //  cout << "\n";
+    }
+
+   
+}
+
+void Increment(){
+    char temp;
+    temp = alphabet[0];
+
+    for(int i = 0; i < 25; i++){
+        alphabet[i] = alphabet[i + 1];
+    }
+
+    alphabet[25] = temp;
 }
