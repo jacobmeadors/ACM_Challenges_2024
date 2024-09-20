@@ -4,17 +4,23 @@
 #include <cctype>
 using namespace std; 
 
+//run functions
 void Increment();
 void IncrementKey();
 void KeyCipher(int);
 
+//set up arrays
 char cipher[26][26];
 char alphabet[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+//set up main strings
 string message;
 string key;
 string emessage;
 
 int main(){
+
+    /*--------------make 26x26 Vigenère cipher-----------------*/
     int row;
     int col;
     int letter;
@@ -27,21 +33,34 @@ int main(){
         }
         Increment();
     }
+    /*--------------------------------------------------------------------*/
 
+    /*-------------------set up message and key-----------------------------*/ 
+    //input what message you want to encrypt
     cout << "Enter the message you would like to Encrypt: ";
     getline(cin,message);
+    //remove spaces from message
     message.erase(remove(message.begin(),message.end(),' '),message.end());
+
+    //input what key you shall be using
     cout << "Enter what key you will be using: ";
     getline(cin,key);  
+    //remove spaces from key
     key.erase(remove(key.begin(),key.end(),' '),key.end());
 
+    //get the length of the message
     int length = message.length();
-    
+
+    //set up array to hold the index values of each char in the message
     int messageIndex[length];
     
+    //make message and key uppercase
     transform(message.begin(), message.end(), message.begin(), ::toupper);
     transform(key.begin(), key.end(), key.begin(), ::toupper);
+/*-----------------------------------------------------------------------*/
 
+/*-------------convert message into index arrays and encrypt message-------------------*/
+    //for loop to make messageIndex
     for (int i = 0; i < length; ++i){
         char lett = message.at(i);
         
@@ -53,11 +72,13 @@ int main(){
             }
         }
     }
-    
+
+    //run the KeyCyper function to create the encrypted message
     for (int i = 0; i < length; ++i){
         KeyCipher(messageIndex[i]);
     }
-    
+
+    //output the encrypted message
     cout << "Encrypted Message: " << emessage << endl;
 
    return 0;
