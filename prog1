@@ -4,68 +4,47 @@
 #include <cctype>
 using namespace std; 
 
-//run increment
 void Increment();
+void IncrementKey();
+void KeyCipher(int);
 
-//create arrays
 char cipher[26][26];
 char alphabet[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-//set up main strings
 string message;
 string key;
+string emessage;
 
 int main(){
-
-    //make 26x26 Vigenère cipher
     int row;
     int col;
     int letter;
+    
     for(row = 0 ; row < 26; row++){
         letter = 0;
         for(col = 0 ; col < 26; col++ ){
             cipher[row][col] = alphabet[letter];
             letter++;
-        //    cout << cipher[row][col];
         }
         Increment();
-      //  cout << "\n";
     }
 
-    /*-------------------set up message and key-----------------------------*/
-    //input what message you want to encrypt
     cout << "Enter the message you would like to Encrypt: ";
-    getline(cin, message);
-    
-    //remove spaces from message
+    getline(cin,message);
     message.erase(remove(message.begin(),message.end(),' '),message.end());
-    
-    //input what key you shall be using
     cout << "Enter what key you will be using: ";
-    getline(cin, key);  
-    
-    //remove spaces from key
+    getline(cin,key);  
     key.erase(remove(key.begin(),key.end(),' '),key.end());
 
-    //make message and key uppercase
+    int length = message.length();
+    
+    int messageIndex[length];
+    
     transform(message.begin(), message.end(), message.begin(), ::toupper);
     transform(key.begin(), key.end(), key.begin(), ::toupper);
 
-/*--------------------------------------------------------------------*/
-
-/*-------------convert message and key into index arrays-------------------*/
-
-    //get the length of the two strings
-    int messageLength = message.length();
-    int keyLength = key.length();
-
-    //set up the index arrays
-    int messageIndex[messageLength];
-    int keyIndex[messageLength];
-
-    //for loop to make messageIndex
-    for (int i = 0; i < messageLength; ++i){
-        char lett = message.at(i);        
+    for (int i = 0; i < length; ++i){
+        char lett = message.at(i);
+        
         int index = -1;
         for (int j = 0; j < 26; ++j) {
             if (alphabet[j] == lett) {
@@ -74,49 +53,31 @@ int main(){
             }
         }
     }
-
-//for loop to make keyIndex
-    for (int i = 0; i < keyLength; ++i){
-        char lett = key.at(i);        
-        int index = -1;
-        for (int j = 0; j < 26; ++j) {
-            if (alphabet[j] == lett) {
-                keyIndex[i] = j;
-                break;
-            }
-        }
-    }
-/*--------------------------------------------------------------------*/
-
-    char final[messageLength];
-    for (int i = 0; i < keyLength; ++i){
-        final[i]=cipher[keyIndex[i]][messageIndex[i]];
-    }
-
-
-
-/*--------------------testing to see if stuff works-------------------------*/
-    cout << message << endl;
-    cout << key << endl;
     
+    for (int i = 0; i < length; ++i){
+        KeyCipher(messageIndex[i]);
+    }
     
-    for (int i = 0; i < messageLength; ++i){
-        cout << messageIndex[i];
-    }
-    cout << endl;
-    for (int i = 0; i < keyLength; ++i){
-        cout << keyIndex[i];
-    }
-    cout << endl;
-    for (int i = 0; i < keyLength; ++i){
-        cout << final[i];
-    }
-    cout << endl;
+    cout << "Encrypted Message: " << emessage << endl;
 
    return 0;
 }
 
-//increment function
+void KeyCipher(int index1){
+    int index2;
+
+    for(int row = 0; row < 26; row++){
+        if(key[0] == cipher[row][0]){
+            index2 = row;
+            IncrementKey();
+            break;
+        }
+    }
+
+    emessage += cipher[index1][index2];
+}
+
+
 void Increment(){
     char temp;
     temp = alphabet[0];
@@ -126,4 +87,15 @@ void Increment(){
     }
 
     alphabet[25] = temp;
+}
+
+void IncrementKey(){
+    char temp;
+    temp = key[0];
+
+    for(int i = 0; i < key.length() - 1; i++){
+        key[i] = key[i + 1];
+    }
+
+    key[key.length() - 1] = temp;
 }
